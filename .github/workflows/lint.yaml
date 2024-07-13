@@ -15,6 +15,12 @@ jobs:
         if: failure()
 
       - run: exit 1
+        id: exit
 
       - run: echo "2. previous step failed"
+
+      - run: echo "3. previous step failed"
+        if: failure()
+
+      - run: echo ${{ steps.exit.outcome}}
         if: failure()
