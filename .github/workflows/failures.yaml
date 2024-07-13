@@ -1,0 +1,31 @@
+name: Failures
+
+on:
+  push:
+
+jobs:
+  run-linters:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - run: echo "test01. 🍻"
+
+      - run: echo "💣 should not run"
+        if: failure()
+
+      - run: exit 1
+        id: exit
+
+      - run: echo "💣 should not run cause previous step failed"
+
+      - run: echo "test02. run cause if-always(), exit.outcome=${{ steps.exit.outcome }} exit.conclusion=${{ steps.exit.conclusion }}"
+        if: always()
+
+      - run: echo "test03. run cause if-failure()"
+        if: failure()
+
+      - run: echo "💣 should not run"
+
+      - run: echo "test04. run cause if-failure()-and-exit.outcome==failure"
+        if: failure() && steps.exit.outcome == 'failure'

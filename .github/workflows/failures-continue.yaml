@@ -1,0 +1,28 @@
+name: Failures
+
+on:
+  push:
+
+jobs:
+  run-linters:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - run: echo "test01. 🍻"
+
+      - run: echo "💣 should not run"
+        if: failure()
+
+      - run: exit 1
+        id: exit
+        continue-on-error: true
+
+      - run: echo "test02. run cause continue-on-error. exit.outcome=${{ steps.exit.outcome }} exit.conclusion=${{ steps.exit.conclusion }}"
+
+      - run: echo "💣 should not run"
+        if: failure()
+
+      # This step makes the job fail
+      - run: exit 2
+        if: steps.exit.outcome == 'failure'
